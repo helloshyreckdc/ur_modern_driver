@@ -158,8 +158,7 @@ set(${PROJECT_NAME}_SOURCES
     src/ur_communication.cpp
     src/robot_state.cpp
     src/robot_state_RT.cpp
-    src/do_output.cpp
-    src/test_io.cpp)
+    src/do_output.cpp)
 add_executable(ur_driver ${${PROJECT_NAME}_SOURCES})
 
 ## Add cmake target dependencies of the executable
@@ -210,3 +209,5 @@ install(DIRECTORY include/${PROJECT_NAME}/
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+add_executable(test_io src/test_io.cpp)
+target_link_libraries(test_io ${catkin_LIBRARIES})
