@@ -1,4 +1,6 @@
 <launch>
     <include file="$(find ur_modern_driver)/launch/ur5_launch_whole_project.launch" />
-    <include file="$(find openni2_launch)/launch/launch_two_cameras.launch" />
+    <include file="$(find ur_modern_driver)/launch/launch_two_cameras.launch" />
+    <node name="publish_calibration" pkg="tf" type="static_transform_publisher" args=" -1.072694  -0.956061  0.220491  -0.014582  0.059231  -0.485862  -0.871905    /base_link /camera_to_link 40
+" />
 </launch>
