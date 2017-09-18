@@ -158,7 +158,8 @@ set(${PROJECT_NAME}_SOURCES
     src/ur_communication.cpp
     src/robot_state.cpp
     src/robot_state_RT.cpp
-    src/do_output.cpp)
+    src/do_output.cpp
+    src/test_io.cpp)
 add_executable(ur_driver ${${PROJECT_NAME}_SOURCES})
 
 ## Add cmake target dependencies of the executable
