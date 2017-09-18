@@ -1,0 +1,21 @@
+<launch>
+    <arg name="camera_in" />
+    <arg name="camera_to" />
+    <include file="$(find openni2_launch)/launch/openni2.launch">
+        <arg name="camera" value="camera_to" />
+    </include>
+
+    <include file="$(find realsense_camera)/launch/sr300_nodelet_rgbd.launch">
+        <arg name="camera" value="camera_in" />
+    </include>
+
+    <node name="image_view_to" pkg="image_view" type="image_view" output="screen">
+	<remap from="image" to="/camera_to/rgb/image_raw" />
+    </node>
+
+    <node name="image_view_in" pkg="image_view" type="image_view" output="screen">
+	<remap from="image" to="/camera_in/rgb/image_raw" />
+    </node>
+  
+</launch>
+

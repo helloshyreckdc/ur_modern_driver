@@ -1,0 +1,4 @@
+<launch>
+    <include file="$(find ur_modern_driver)/launch/ur5_launch_whole_project.launch" />
+    <include file="$(find openni2_launch)/launch/launch_two_cameras.launch" />
+</launch>
