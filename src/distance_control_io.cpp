@@ -12,6 +12,8 @@
 #include <time.h>
 #include <cstdlib>
 
+#include <std_msgs/Float32.h>
+
 #include "ros/ros.h"
 #include <ros/console.h>
 #include "sensor_msgs/JointState.h"
@@ -38,10 +40,21 @@
 #include <tf/tf.h>
 #include <tf/transform_broadcaster.h>
 
+float distance = 5;
+bool lost_target = false;
+int count = 0;
+
+void distanceControlCallback(const std_msgs::Float32::ConstPtr& msg)
+    {
+	distance = msg->data; 
+	lost_target = false;
+	count = 0;
+    }
 
 int main(int argc, char **argv)
 {
-    ros::init(argc, argv, "test_control_ur_io");
+
+    ros::init(argc, argv, "distance_control_ur_io");
 //    if (argc != 3)
 //    {
 //        ROS_INFO("usage: add_two_ints_client X Y");
@@ -53,15 +66,54 @@ int main(int argc, char **argv)
     ur_msgs::SetIO srv;
     srv.request.fun = 1; 
     srv.request.pin = 2;
-    srv.request.state = atof(argv[1]);
-    if (client.call(srv))
+
+    ros::Subscriber sub = n.subscribe("/kinect_merge/minimum_distance", 1000, distanceControlCallback);
+
+    ros::Rate loop_rate(100);
+
+    bool low_speed_state = 0;
+    bool last_low_speed_state;
+
+    float last_distance;
+
+    while(ros::ok())
     {
-        ROS_INFO("Succeed!");
-    }
-    else
-    {
-        ROS_ERROR("Failed to call service setIO");
-        return 1;
+	last_low_speed_state = low_speed_state;
+	low_speed_state = distance < 2.0;
+	// lost target, it means there is no one there
+	if (last_distance == distance)
+	{
+	    count++;
+	}
+	if (count > 200)
+	{
+	    lost_target = true;
+	}
+	if (lost_target)
+	{
+	    low_speed_state = 0;
+	}
+
+	srv.request.state = low_speed_state; 
+
+	if(low_speed_state != last_low_speed_state)
+	{
+            if (client.call(srv))
+            {
+                ROS_INFO("Succeed!");
+            }
+            else
+            {
+                ROS_ERROR("Failed to call service setIO");
+                return 1;
+            }
+	}
+
+	ros::spinOnce();
+	
+	loop_rate.sleep();
+
+	last_distance = distance;
     }
 
     return 0;

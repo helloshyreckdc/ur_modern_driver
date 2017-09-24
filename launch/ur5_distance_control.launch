@@ -1,0 +1,4 @@
+<launch>
+    <node name="ur_distance_control" pkg="ur_modern_driver" type="distance_control_io" output="screen" />
+
+</launch>

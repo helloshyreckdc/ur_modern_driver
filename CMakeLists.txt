@@ -209,5 +209,5 @@ install(DIRECTORY include/${PROJECT_NAME}/
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
-add_executable(test_io src/test_io.cpp)
-target_link_libraries(test_io ${catkin_LIBRARIES})
+add_executable(distance_control_io src/distance_control_io.cpp)
+target_link_libraries(distance_control_io ${catkin_LIBRARIES})
